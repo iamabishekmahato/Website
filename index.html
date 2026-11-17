@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101a35">
+<title>MCC Data Center</title>
+<style>
+:root{--navy:#101a35;--blue:#315efb;--cyan:#28c7d9;--ink:#18233f;--muted:#6d7891;--bg:#f3f6fc;--line:#e7ebf3;--green:#159b70;--orange:#f2a93b}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+.topbar{height:68px;background:white;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(16px,calc((100% - 1120px)/2));position:sticky;top:0;z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:900}.brand-mark{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:white;font-size:20px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:1.5px;margin-top:3px}
+main{max-width:1120px;margin:auto;padding:25px 16px 45px}.hero{background:linear-gradient(115deg,#111c3b,#1c3472,#176c8a);border-radius:24px;padding:30px;color:white}.eyebrow{color:#9eeaf1;font-weight:bold;letter-spacing:2px;font-size:11px}.hero h1{font-size:clamp(30px,5vw,47px);margin:12px 0;line-height:1.1}.hero p{color:#d7e2ff;line-height:1.6;max-width:650px}.creator{font-size:13px;color:#b8f4f3;font-weight:bold;margin:16px 0}
+.btn{padding:11px 15px;border-radius:10px;font-weight:bold;margin:4px 3px}.primary{background:var(--blue);color:white}.green{background:var(--green);color:white}.orange{background:var(--orange);color:#382900}.light{background:white;color:#1b2d59}.muted{background:#eef1f7;color:#4c5872}.danger{background:#ffebed;color:#b83243}.stats,.grid{display:grid;gap:13px}.stats{grid-template-columns:repeat(3,1fr);margin:18px 0 25px}.stat,.card,.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:17px}.stat strong{display:block;font-size:23px}.stat span{color:var(--muted);font-size:12px}.grid{grid-template-columns:repeat(3,1fr)}.card h3{margin:8px 0}.card p{color:var(--muted);font-size:13px;line-height:1.5;min-height:38px}.ico{font-size:25px}.heading{margin:25px 0 13px}.heading h2{margin:0}.heading p{color:var(--muted);font-size:13px}.panel{padding:21px}.panel h2{margin-top:0}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;font-weight:bold;color:#58647e;margin-bottom:6px}.field input{width:100%;padding:12px;border:1px solid #dfe5ef;border-radius:10px;background:#fbfcff;outline:none}.field input:focus{border-color:var(--blue)}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin:15px 0}table{border-collapse:collapse;width:100%;min-width:560px;font-size:13px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}th{background:#f7f9fd;color:#64708a}.empty{text-align:center;color:var(--muted);padding:22px}.note{font-size:11px;color:var(--muted);line-height:1.55}.profile-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;margin-top:15px}.profile{background:white;border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}.avatar{width:116px;height:116px;border-radius:50%;object-fit:cover;object-position:center 28%;background:#e9efff;margin:0 auto 10px;display:grid;place-items:center;font-size:32px;color:#52658c}.profile h3{margin:7px 0}.profile p{font-size:12px;color:var(--muted);margin:5px}.profile-summary{background:#fff;border:1px solid var(--line);border-radius:13px;padding:15px;margin:9px 0;cursor:pointer}.profile-summary h3{margin:0 0 5px}.profile-summary p{margin:0;color:var(--muted);font-size:13px}.carousel{background:#101a35;border-radius:18px;overflow:hidden;margin:18px 0;position:relative;min-height:190px}.carousel img{width:100%;height:260px;object-fit:cover}.carousel-caption{position:absolute;bottom:0;left:0;right:0;padding:14px;background:linear-gradient(transparent,#000b);color:white;font-weight:bold}.carousel-dots{display:flex;justify-content:center;gap:7px;margin:8px}.carousel-dots span{width:7px;height:7px;border-radius:50%;background:#bdc8dc}.carousel-dots span.active{background:var(--blue)}.search{width:100%;padding:12px;border:1px solid #dfe5ef;border-radius:10px;margin:12px 0}.global-search{display:flex;gap:8px;margin:18px 0}.global-search input{flex:1;min-width:0;padding:13px;border:1px solid #dfe5ef;border-radius:11px}.search-results{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;margin:10px 0}.search-results:empty{display:none}.footer{text-align:center;color:#8a94a8;font-size:11px;padding:25px}
+@media(max-width:700px){main{padding:15px 12px}.hero{padding:23px 19px}.grid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.stats{gap:7px}.stat{padding:12px 9px}.stat strong{font-size:18px}.panel{padding:16px}.topbar{padding:0 12px}}
+
+/* Advanced coaching-centre additions */
+:root{--violet:#6c4cf6;--soft:#eef0ff;--shadow:0 12px 32px #17264a0d}
+.topbar{box-shadow:0 3px 18px #17264a08}.topbar>span{font-size:11px;font-weight:800;color:#159b70;letter-spacing:.7px}
+.hero{box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"MCC";position:absolute;right:25px;bottom:-36px;font-size:clamp(90px,18vw,190px);font-weight:900;color:#ffffff0d;pointer-events:none}
+.card,.panel,.stat{box-shadow:var(--shadow)}.card{transition:transform .18s,box-shadow .18s}.card:hover{transform:translateY(-3px);box-shadow:0 16px 35px #17264a16}
+.feature-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}.feature-pill{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px;text-align:center;font-size:12px;font-weight:800}.feature-pill b{display:block;font-size:22px;margin-bottom:5px}
+.section-banner{background:linear-gradient(110deg,#f0f3ff,#e9fbfc);border:1px solid #e2e9ff;border-radius:16px;padding:18px;margin-bottom:16px}.section-banner h2{margin:0 0 6px}.section-banner p{margin:0;color:var(--muted);font-size:13px}
+.course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:13px}.course-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.course-tag{display:inline-block;background:var(--soft);color:#5941d6;border-radius:20px;padding:5px 9px;font-size:10px;font-weight:800}.schedule-day{font-weight:900;color:#315efb;background:#f3f5ff}.admin-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.admin-tool{background:#f8faff;border:1px solid var(--line);border-radius:13px;padding:13px;text-align:left}.admin-tool b{display:block;margin:4px 0}.admin-tool small{color:var(--muted)}
+@media(max-width:700px){.feature-strip{grid-template-columns:repeat(2,1fr)}.admin-tools{grid-template-columns:repeat(2,1fr)}}
+
+</style>
+</head>
+<body>
+<header class="topbar"><div class="brand"><div class="brand-mark">M</div><div>MCC DATA CENTER<small>LEARNING • RECORDS • PROGRESS</small></div></div><span>● SYSTEM READY</span></header>
+<main>
+<section id="home">
+ <div class="hero">
+  <div class="eyebrow">WELCOME TO MCC</div>
+  <h1>Learn Better.<br>Grow Together.</h1>
+  <div class="creator">CREATED BY ABISHEK MAHATO</div>
+  <p>Your digital coaching platform for admissions, student and teacher profiles, and online learning.</p>
+  <button class="btn light" onclick="page('admission')">Apply for Admission</button>
+  <button class="btn light" onclick="page('directory')">Explore Profiles</button>
+ </div>
+ <div class="feature-strip"><div class="feature-pill"><b>🎓</b>Expert Teachers</div><div class="feature-pill"><b>📚</b>Structured Courses</div><div class="feature-pill"><b>🗓️</b>Class Timetable</div><div class="feature-pill"><b>💻</b>Online Learning</div></div>
+ <div class="global-search"><input id="globalSearch" placeholder="Search courses, teachers, classes, notices..." oninput="runGlobalSearch()"><button class="btn primary" onclick="runGlobalSearch()">Search</button><button class="btn muted" onclick="clearGlobalSearch()">Clear</button></div><div id="globalSearchResults" class="search-results"></div>
+ <div class="grid" style="margin:14px 0"><div class="card"><div class="ico">📘</div><h3>Course Catalogue</h3><p>Explore available subjects, course levels and durations.</p><button class="btn primary" onclick="page('coursesPage')">Explore Courses</button></div><div class="card"><div class="ico">🗓️</div><h3>Class Timetable</h3><p>See the weekly class schedule and teachers.</p><button class="btn primary" onclick="page('timetablePage')">View Timetable</button></div><div class="card"><div class="ico">📞</div><h3>Contact MCC</h3><p>Send a question or admission enquiry to the coaching team.</p><button class="btn green" onclick="page('contactPage')">Contact Us</button></div></div>
+ <div id="homePost" class="card hidden" style="margin:18px 0;border-left:5px solid var(--blue)"><h2 id="homePostTitle"></h2><p id="homePostBody" style="white-space:pre-wrap"></p><small id="homePostDate" class="note"></small></div>
+ <div id="homeCarousel" class="carousel hidden"><img id="carouselImage" alt="MCC gallery picture"><div class="carousel-caption" id="carouselCaption">MCC Gallery</div></div><div id="carouselDots" class="carousel-dots"></div>
+ <div class="stats">
+  <div class="stat">🎓 <strong id="sCount">0</strong><span>Students</span></div>
+  <div class="stat">👩‍🏫 <strong id="tCount">0</strong><span>Teachers</span></div>
+  <div class="stat">📝 <strong id="aCount">0</strong><span>Pending applications</span></div>
+ </div>
+ <div class="heading"><h2>Choose Your Portal</h2><p>Open the service you need.</p></div>
+ <div class="grid">
+  <div class="card"><div class="ico">📝</div><h3>Online Admission</h3><p>Send an application to MCC.</p><button class="btn green" onclick="page('admission')">Apply Now</button></div>
+  <div class="card"><div class="ico">🎓</div><h3>Student Profiles</h3><p>Browse student names and classes.</p><button class="btn primary" onclick="page('studentsPage')">View Students</button></div>
+  <div class="card"><div class="ico">👩‍🏫</div><h3>Teacher Profiles</h3><p>Browse teacher names and profiles.</p><button class="btn primary" onclick="page('teachersPage')">View Teachers</button></div>
+  <div class="card"><div class="ico">🔐</div><h3>Teacher / Admin</h3><p>Password-protected management dashboard.</p><button class="btn orange" onclick="page('login')">Teacher Login</button></div>
+  <div class="card"><div class="ico">🎥</div><h3>Online Classes</h3><p>Join live lessons and watch recordings.</p><button class="btn primary" onclick="page('classes')">Open Classes</button></div>
+  <div class="card"><div class="ico">🎓</div><h3>Student Payment Account</h3><p>Students can securely check their payment details using their personal PIN.</p><button class="btn green" onclick="openPaymentAccess('student')">Student Payment</button></div>
+  <div class="card"><div class="ico">🔐</div><h3>Teacher Create / Change PIN</h3><p>Teachers can set their own private 4-digit PIN using their registered name and contact number.</p><button class="btn orange" onclick="page('teacherPinSetup')">Set My PIN</button></div>
+  <div class="card"><div class="ico">👩‍🏫</div><h3>Teacher Payment Account</h3><p>Teachers can check their payment and contact details using their personal PIN.</p><button class="btn primary" onclick="openPaymentAccess('teacher')">Teacher Payment</button></div>
+ </div>
+</section>
+
+<section id="admission" class="hidden panel">
+ <h2>📝 Online Admission</h2>
+ <div class="formgrid">
+  <div class="field"><label>FULL NAME *</label><input id="aName" placeholder="Student name"></div>
+  <div class="field"><label>CLASS</label><input id="aClass" placeholder="Class 10"></div>
+  <div class="field"><label>CONTACT *</label><input id="aContact" type="tel" placeholder="Phone number"></div>
+  <div class="field"><label>ADDRESS</label><input id="aAddress" placeholder="Town / Village"></div>
+ </div>
+ <button class="btn green" onclick="applyAdmission()">Submit Application</button><button class="btn muted" onclick="page('home')">Back</button>
+</section>
+
+<section id="login" class="hidden panel">
+ <h2>🔐 Teacher / Admin Login</h2>
+ <p>Enter the teacher password to open the management dashboard.</p>
+ <div class="field"><label>TEACHER PASSWORD</label><input id="teacherPassword" type="password" placeholder="Enter password" onkeydown="if(event.key==='Enter')loginTeacher()"></div>
+ <button class="btn primary" onclick="loginTeacher()">Unlock Dashboard</button><button class="btn muted" onclick="page('home')">Cancel</button>
+ <p class="note">Offline demo mode: the password is stored in this browser. For a public website, use Firebase Authentication; browser storage is not secure authentication.</p>
+</section>
+
+<section id="admin" class="hidden">
+ <div class="panel">
+  <h2>👨‍🏫 Teacher Dashboard</h2><p>Manage admissions, people and online lessons.</p>
+  <button class="btn green" onclick="openForm('student')">➕ Add Student</button>
+  <button class="btn primary" onclick="openForm('teacher')">➕ Add Teacher</button>
+  <button class="btn orange" onclick="page('requests')">Admission Requests (<span id="pendingCount">0</span>)</button>
+  <button class="btn muted" onclick="page('manage')">Manage Records</button>
+  <button class="btn primary" onclick="page('live')">🔴 Create / Manage Live Class</button>
+  <button class="btn green" onclick="page('videos')">🎬 Add Recorded Video</button>
+  <button class="btn orange" onclick="page('gallery')">🖼️ Manage Home Pictures</button>
+  <button class="btn green" onclick="page('homeEditor')">📰 Edit / Publish Front Page Post</button>
+  <button class="btn primary" onclick="page('paymentAdmin')">💳 Manage Payments & 4-Digit PINs</button>
+  <div class="admin-tools"><button class="admin-tool" onclick="page('courseAdmin')">📘 <b>Manage Courses</b><small>Add, edit or remove courses</small></button><button class="admin-tool" onclick="page('timetableAdmin')">🗓️ <b>Manage Timetable</b><small>Set weekly class schedule</small></button><button class="admin-tool" onclick="page('contactInbox')">📩 <b>Contact Enquiries</b><small>View messages from visitors</small></button></div>
+  <button class="btn muted" onclick="logout()">Logout</button>
+ </div>
+</section>
+
+<section id="entry" class="hidden panel">
+ <h2 id="formTitle">Add Profile</h2><input type="hidden" id="entryType"><input type="hidden" id="entryIndex">
+ <div class="formgrid">
+  <div class="field"><label>FULL NAME *</label><input id="pName" placeholder="Full name"></div>
+  <div class="field"><label>CONTACT</label><input id="pContact" placeholder="Phone number"></div>
+  <div class="field" id="classField"><label>CLASS</label><input id="pClass" placeholder="Class / Grade"></div>
+  <div class="field hidden" id="salaryField"><label>SALARY (OPTIONAL)</label><input id="pSalary" type="number" min="0" placeholder="Salary"></div>
+  <div class="field"><label>TOTAL AMOUNT (Rs.)</label><input id="pAmount" type="number" min="0" placeholder="Total fee / amount"></div>
+  <div class="field"><label>AMOUNT PAID (Rs.)</label><input id="pPaid" type="number" min="0" placeholder="Amount already paid"></div>
+  <div class="field"><label>PAYMENT METHOD</label><input id="pMethod" placeholder="eSewa, Khalti, Cash, Bank transfer..."></div>
+  <div class="field"><label>PROFILE PHOTO</label><input id="pPhoto" type="file" accept="image/*"></div>
+ </div>
+ <p class="note">Choose a clear photo. The image is resized before saving to reduce storage use.</p>
+ <button class="btn green" onclick="saveProfile()">Save Profile</button><button class="btn muted" onclick="page('admin')">Cancel</button>
+</section>
+
+<section id="studentsPage" class="hidden panel">
+ <h2>🎓 Student Profiles</h2><p>Only name and class show first. Select a student to open their profile.</p>
+ <input class="search" id="studentProfileSearch" placeholder="Search student name or class..." oninput="renderStudentNames()"><div id="studentNames"></div>
+ <button class="btn muted" onclick="page('home')">Back Home</button>
+</section>
+<section id="teachersPage" class="hidden panel">
+ <h2>👩‍🏫 Teacher Profiles</h2><p>Select a teacher to view their profile and photo, if available.</p>
+ <input class="search" id="teacherProfileSearch" placeholder="Search teacher name..." oninput="renderTeacherNames()"><div id="teacherNames"></div>
+ <button class="btn muted" onclick="page('home')">Back Home</button>
+</section>
+<section id="profileDetail" class="hidden panel"><div id="profileDetailContent"></div><button class="btn muted" onclick="page(profileBackPage)">← Back to profiles</button></section>
+
+<section id="requests" class="hidden panel">
+ <h2>📩 Admission Requests</h2><div id="requestsList"></div><button class="btn muted" onclick="page('admin')">Dashboard</button>
+</section>
+<section id="manage" class="hidden panel">
+ <h2>Manage Student & Teacher Records</h2><div id="manageList"></div><button class="btn muted" onclick="page('admin')">Dashboard</button>
+</section>
+
+<section id="live" class="hidden panel">
+ <h2>🔴 Live Class Setup</h2>
+ <div class="field"><label>CLASS TITLE</label><input id="liveTitle" placeholder="Mathematics - Class 10"></div>
+ <div class="field"><label>MEETING LINK (Google Meet / Zoom)</label><input id="liveUrl" type="url" placeholder="https://..."></div>
+ <button class="btn green" onclick="saveLive()">Save Live Class</button><div id="livePreview"></div>
+ <p class="note">The website saves and shares a meeting link. Video meetings are hosted by Google Meet, Zoom or another meeting provider.</p>
+ <button class="btn muted" onclick="page('admin')">Dashboard</button>
+</section>
+
+<section id="videos" class="hidden panel">
+ <h2>🎬 Recorded Lessons</h2>
+ <div class="field"><label>VIDEO TITLE</label><input id="videoTitle" placeholder="Chapter 1 - Introduction"></div>
+ <div class="field"><label>VIDEO LINK</label><input id="videoUrl" type="url" placeholder="https://..."></div>
+ <button class="btn green" onclick="addVideo()">Add Recorded Video</button><div id="videoManageList"></div>
+ <button class="btn muted" onclick="page('admin')">Dashboard</button>
+</section>
+
+<section id="gallery" class="hidden panel"><h2>🖼️ Home Page Picture Gallery</h2><p>Add pictures to scroll automatically on the first page.</p><div class="field"><label>SELECT PICTURE</label><input id="galleryFile" type="file" accept="image/*"></div><div class="field"><label>PICTURE CAPTION</label><input id="galleryCaptionInput" placeholder="Welcome to MCC"></div><button class="btn green" onclick="addGalleryPicture()">Add Picture</button><div id="galleryManageList"></div><button class="btn muted" onclick="page('admin')">Dashboard</button><p class="note">Only a logged-in teacher can add or remove gallery pictures.</p></section>
+<section id="homeEditor" class="hidden panel">
+ <h2>📰 Front Page Editor</h2>
+ <p>Create an announcement, notice, update, or message that appears on the website home page.</p>
+ <div class="field"><label>POST TITLE</label><input id="postTitle" maxlength="100" placeholder="e.g. Admission Open for 2027"></div>
+ <div class="field"><label>POST / ANNOUNCEMENT</label><textarea id="postBody" rows="6" maxlength="3000" placeholder="Write your message for students and visitors..."></textarea></div>
+ <button class="btn green" onclick="publishHomePost()">Publish on Front Page</button>
+ <button class="btn danger" onclick="removeHomePost()">Remove Post</button>
+ <button class="btn muted" onclick="page('admin')">Back to Dashboard</button>
+ <p class="note">Only a logged-in admin can publish or remove the front-page post.</p>
+</section>
+
+<section id="teacherPinSetup" class="hidden panel">
+ <h2>🔐 Teacher Self-Service PIN Setup</h2>
+ <p>This feature is for registered teacher accounts. Use the exact name and contact number saved by MCC.</p>
+ <div class="field"><label>REGISTERED FULL NAME</label><input id="teacherPinName" placeholder="Your registered full name"></div>
+ <div class="field"><label>REGISTERED CONTACT NUMBER</label><input id="teacherPinContact" type="tel" placeholder="Your registered phone number"></div>
+ <div class="field"><label>CURRENT PIN (ONLY IF YOU ALREADY HAVE ONE)</label><input id="teacherOldPin" type="password" inputmode="numeric" maxlength="4" placeholder="Leave blank for first-time setup"></div>
+ <div class="field"><label>CREATE NEW 4-DIGIT PIN</label><input id="teacherNewPin" type="password" inputmode="numeric" maxlength="4" placeholder="4 digits"></div>
+ <div class="field"><label>CONFIRM NEW PIN</label><input id="teacherConfirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="Repeat 4 digits"></div>
+ <button class="btn green" onclick="setTeacherOwnPin()">Save My PIN</button>
+ <button class="btn muted" onclick="page('home')">Back Home</button>
+ <p class="note">Never share your PIN. For reliable identity verification on a public website, use Firebase Authentication and database security rules.</p>
+</section>
+
+<section id="paymentAccess" class="hidden panel">
+ <h2 id="paymentAccessTitle">Payment Account Access</h2>
+ <p>Enter your registered full name and your personal 4-digit PIN.</p>
+ <div class="field"><label>FULL NAME</label><input id="accessName" autocomplete="name" placeholder="Registered full name"></div>
+ <div class="field"><label>4-DIGIT PIN</label><input id="accessPin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" placeholder="Enter your PIN"></div>
+ <button class="btn primary" onclick="verifyPaymentAccess()">Verify PIN & View Details</button>
+ <button class="btn muted" onclick="page('home')">Back Home</button>
+ <div id="paymentAccessResult"></div>
+</section>
+<section id="paymentAdmin" class="hidden panel">
+ <h2>💳 Payment & PIN Management</h2>
+ <p>Admin controls: view each person's PIN, edit payment details, or generate a new PIN. A new PIN immediately disables the previous PIN.</p>
+ <p class="note">This offline version stores data in this browser only. It does not synchronize between phones or browsers.</p>
+ <div id="paymentAdminList"></div>
+ <button class="btn muted" onclick="page('admin')">Back to Dashboard</button>
+</section>
+<section id="classes" class="hidden panel">
+ <h2>📚 Online Learning</h2><div id="liveStudent"></div><div class="heading"><h2>Recorded Videos</h2></div><div id="videoStudentList"></div>
+ <button class="btn muted" onclick="page('home')">Home</button>
+</section>
+<div class="footer">© <span id="year"></span> MCC DATA CENTER • Created by Abishek Mahato</div>
+</main>
+<script>
+/* Offline demo password. For a public website, use Firebase Authentication and server-side security rules. */
+const DEFAULT_ADMIN_PASSWORD = "1234";
+function getAdminPassword(){ return DEFAULT_ADMIN_PASSWORD; }
+const read = key => { try { return JSON.parse(localStorage.getItem(key)) || []; } catch(e) { return []; } };
+let students=read("mcc_students"), teachers=read("mcc_teachers"), admissions=read("mcc_admissions");
+let videos=read("mcc_videos"), live=read("mcc_live");
+let teacherLoggedIn=false;
+function persist(){
+ localStorage.setItem("mcc_students",JSON.stringify(students));
+ localStorage.setItem("mcc_teachers",JSON.stringify(teachers));
+ localStorage.setItem("mcc_admissions",JSON.stringify(admissions));
+ localStorage.setItem("mcc_videos",JSON.stringify(videos));
+ localStorage.setItem("mcc_live",JSON.stringify(live));
+}
+function page(id){
+ if(["admin","entry","requests","manage","live","videos","gallery","paymentAdmin","homeEditor","courseAdmin","timetableAdmin","contactInbox"].includes(id) && !teacherLoggedIn){id="login";}
+ document.querySelectorAll("main>section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ if(id==="studentsPage")renderStudentNames();
+ if(id==="teachersPage")renderTeacherNames();
+ if(id==="gallery")renderGalleryManager();
+ if(id==="homeEditor")loadHomePostEditor();
+ if(id==="home"){renderHomeGallery();renderHomePost();}
+ if(id==="admin"||id==="requests"||id==="manage")renderAdmin();
+ if(id==="paymentAdmin")renderPaymentAdmin();
+ if(id==="live")renderLive();
+ if(id==="videos")renderVideoManager();
+ if(id==="classes")renderClasses();
+ if(id==="coursesPage")renderPublicCourses();
+ if(id==="timetablePage")renderPublicTimetable();
+ if(id==="courseAdmin")renderCourseAdmin();
+ if(id==="timetableAdmin")renderTimetableAdmin();
+ if(id==="contactInbox")renderContactInbox();
+ updateCounts();window.scrollTo({top:0,behavior:"smooth"});
+}
+function updateCounts(){
+ document.getElementById("sCount").textContent=students.length;
+ document.getElementById("tCount").textContent=teachers.length;
+ document.getElementById("aCount").textContent=admissions.length;
+ document.getElementById("pendingCount").textContent=admissions.length;
+}
+function loginTeacher(){
+ if(document.getElementById("teacherPassword").value===getAdminPassword()){
+  teacherLoggedIn=true;document.getElementById("teacherPassword").value="";page("admin");
+ }else alert("Incorrect password. Please try again.");
+}
+
+function changeAdminPassword(){
+ if(!teacherLoggedIn){alert("Only an authenticated admin can change the password.");return;}
+ const current=document.getElementById("currentAdminPassword").value;
+ const next=document.getElementById("newAdminPassword").value;
+ const confirmNext=document.getElementById("confirmAdminPassword").value;
+ if(current!==getAdminPassword()){alert("Current password is incorrect.");return;}
+ if(next.length<8){alert("New password must contain at least 8 characters.");return;}
+ if(next!==confirmNext){alert("New password and confirmation do not match.");return;}
+ if(next===current){alert("Choose a different password.");return;}
+ localStorage.setItem("mcc_admin_password",next);
+ ["currentAdminPassword","newAdminPassword","confirmAdminPassword"].forEach(id=>document.getElementById(id).value="");
+ alert("Admin password changed successfully. Use the new password next time you log in.");
+}
+
+let homePost = (()=>{try{return JSON.parse(localStorage.getItem("mcc_home_post"))||null;}catch(e){return null;}})();
+function renderHomePost(){
+ const box=document.getElementById("homePost");
+ if(!box)return;
+ if(!homePost||(!homePost.title&&!homePost.body)){box.classList.add("hidden");return;}
+ document.getElementById("homePostTitle").textContent=homePost.title||"MCC Notice";
+ document.getElementById("homePostBody").textContent=homePost.body||"";
+ document.getElementById("homePostDate").textContent=homePost.date||"";
+ box.classList.remove("hidden");
+}
+function loadHomePostEditor(){
+ document.getElementById("postTitle").value=homePost?.title||"";
+ document.getElementById("postBody").value=homePost?.body||"";
+}
+function publishHomePost(){
+ if(!teacherLoggedIn){alert("Admin login required.");return;}
+ const title=document.getElementById("postTitle").value.trim();
+ const body=document.getElementById("postBody").value.trim();
+ if(!title||!body){alert("Enter both a post title and message.");return;}
+ homePost={title,body,date:"Published: "+new Date().toLocaleString()};
+ localStorage.setItem("mcc_home_post",JSON.stringify(homePost));
+ renderHomePost();alert("Your post is now visible on the front page.");page("home");
+}
+function removeHomePost(){
+ if(!teacherLoggedIn){alert("Admin login required.");return;}
+ if(!confirm("Remove the front-page post?"))return;
+ homePost=null;localStorage.removeItem("mcc_home_post");renderHomePost();page("home");
+}
+function setTeacherOwnPin(){
+ const name=document.getElementById("teacherPinName").value.trim().toLowerCase();
+ const contact=document.getElementById("teacherPinContact").value.trim();
+ const oldPin=document.getElementById("teacherOldPin").value.trim();
+ const pin=document.getElementById("teacherNewPin").value.trim();
+ const confirmPin=document.getElementById("teacherConfirmPin").value.trim();
+ if(!name||!contact){alert("Enter your registered name and contact number.");return;}
+ if(!/^[0-9]{4}$/.test(pin)){alert("Your new PIN must be exactly 4 digits.");return;}
+ if(pin!==confirmPin){alert("The new PINs do not match.");return;}
+ const teacher=teachers.find(t=>String(t.name||"").trim().toLowerCase()===name&&String(t.contact||"").trim()===contact);
+ if(!teacher){alert("Teacher account not found. Check your registered name and contact number.");return;}
+ if(teacher.pin&&String(teacher.pin)!==oldPin){alert("Current PIN is incorrect. Contact the MCC admin if you have forgotten it.");return;}
+ if(teachers.some(t=>t!==teacher&&String(t.pin||"")===pin)){alert("This PIN is already used by another teacher. Choose a different PIN.");return;}
+ teacher.pin=pin;persist();
+ ["teacherPinName","teacherPinContact","teacherOldPin","teacherNewPin","teacherConfirmPin"].forEach(id=>document.getElementById(id).value="");
+ alert("Your teacher PIN has been saved. You can now use it to open your teacher payment account.");
+ page("home");
+}
+
+function runGlobalSearch(){
+ const input=document.getElementById("globalSearch");
+ const out=document.getElementById("globalSearchResults");
+ if(!input||!out)return;
+ const q=input.value.trim().toLowerCase();
+ if(!q){out.innerHTML="";return;}
+ const matches=[];
+ students.forEach(p=>{
+  if([p.name,p.class,p.contact].some(v=>String(v||"").toLowerCase().includes(q)))
+   matches.push(`<div class="profile-summary" onclick="page('studentsPage');document.getElementById('studentProfileSearch').value=${JSON.stringify(q)};renderStudentNames()"><b>🎓 Student: ${esc(p.name)}</b><p>${esc(p.class||"Class not set")} • ${esc(p.contact||"")}</p></div>`);
+ });
+ teachers.forEach(p=>{
+  if([p.name,p.contact].some(v=>String(v||"").toLowerCase().includes(q)))
+   matches.push(`<div class="profile-summary" onclick="page('teachersPage');document.getElementById('teacherProfileSearch').value=${JSON.stringify(q)};renderTeacherNames()"><b>👩‍🏫 Teacher: ${esc(p.name)}</b><p>${esc(p.contact||"")}</p></div>`);
+ });
+ videos.forEach(v=>{
+  if([v.title,v.url].some(x=>String(x||"").toLowerCase().includes(q)))
+   matches.push(`<div class="profile-summary"><b>🎬 ${esc(v.title)}</b><p><a href="${esc(v.url)}" target="_blank" rel="noopener">Open lesson ↗</a></p></div>`);
+ });
+ if(live&&[live.title,live.url].some(x=>String(x||"").toLowerCase().includes(q)))
+  matches.push(`<div class="profile-summary"><b>🔴 Live class: ${esc(live.title)}</b><p><a href="${esc(live.url)}" target="_blank" rel="noopener">Join class ↗</a></p></div>`);
+ if(typeof mccCourses!=="undefined")mccCourses.forEach(c=>{if([c.name,c.level,c.description].join(" ").toLowerCase().includes(q))matches.push(`<div class="profile-summary" onclick="page('coursesPage')"><b>📘 ${esc(c.name)}</b><p>${esc(c.level||"Course")} • ${esc(c.duration||"")}</p></div>`)});
+ if(typeof mccSchedule!=="undefined")mccSchedule.forEach(t=>{if([t.subject,t.teacher,t.day,t.time].join(" ").toLowerCase().includes(q))matches.push(`<div class="profile-summary" onclick="page('timetablePage')"><b>🗓️ ${esc(t.subject)}</b><p>${esc(t.day)} • ${esc(t.time)} • ${esc(t.teacher||"")}</p></div>`)});
+ if(typeof homePost!=="undefined"&&homePost&&[homePost.title,homePost.body].join(" ").toLowerCase().includes(q))matches.push(`<div class="profile-summary"><b>📢 ${esc(homePost.title)}</b><p>Front-page announcement</p></div>`);
+ out.innerHTML=matches.length?`<b>Search results (${matches.length})</b>${matches.join("")}`:'<p class="empty">No matching records found.</p>';
+}
+function clearGlobalSearch(){
+ const input=document.getElementById("globalSearch"),out=document.getElementById("globalSearchResults");
+ if(input)input.value="";
+ if(out)out.innerHTML="";
+}
+
+function logout(){teacherLoggedIn=false;page("home");}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function applyAdmission(){
+ const name=document.getElementById("aName").value.trim(),contact=document.getElementById("aContact").value.trim();
+ if(!name||!contact){alert("Please enter the student name and contact.");return;}
+ admissions.push({name,contact,class:document.getElementById("aClass").value.trim(),address:document.getElementById("aAddress").value.trim()});
+ persist();["aName","aContact","aClass","aAddress"].forEach(id=>document.getElementById(id).value="");
+ alert("Application submitted.");page("home");
+}
+function openForm(type,index=""){
+ document.getElementById("entryType").value=type;document.getElementById("entryIndex").value=index;
+ document.getElementById("formTitle").textContent=(index===""?"Add ":"Edit ")+(type==="student"?"Student":"Teacher")+" Profile";
+ document.getElementById("classField").classList.toggle("hidden",type!=="student");
+ document.getElementById("salaryField").classList.toggle("hidden",type!=="teacher");
+ ["pName","pContact","pClass","pSalary","pAmount","pPaid","pMethod","pPhoto"].forEach(id=>document.getElementById(id).value="");
+ if(index!==""){
+  const obj=(type==="student"?students:teachers)[Number(index)];
+  document.getElementById("pName").value=obj.name||"";document.getElementById("pContact").value=obj.contact||"";
+  document.getElementById("pClass").value=obj.class||"";document.getElementById("pSalary").value=obj.salary||"";
+  document.getElementById("pAmount").value=obj.amount??obj.salary??"";document.getElementById("pPaid").value=obj.paid??"";document.getElementById("pMethod").value=obj.paymentMethod||"";
+ }
+ page("entry");
+}
+function resizePhoto(file){
+ return new Promise((resolve,reject)=>{
+  if(!file){resolve("");return;}
+  if(!file.type.startsWith("image/")){reject(new Error("Please select an image file."));return;}
+  const reader=new FileReader();
+  reader.onload=()=>{
+   const img=new Image();
+   img.onload=()=>{
+    const max=360,scale=Math.min(1,max/Math.max(img.width,img.height));
+    const canvas=document.createElement("canvas");canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
+    canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
+    resolve(canvas.toDataURL("image/jpeg",0.72));
+   };
+   img.onerror=()=>reject(new Error("Could not read that image."));
+   img.src=reader.result;
+  };
+  reader.onerror=()=>reject(new Error("Could not load photo."));
+  reader.readAsDataURL(file);
+ });
+}
+function makePin(list=[]){
+ // Create a cryptographically random 4-digit PIN; avoid duplicates within this account type.
+ if(!window.crypto || !window.crypto.getRandomValues) throw new Error("Secure PIN generation is unavailable. Open this site in an updated browser over HTTPS.");
+ const used=new Set(list.map(person=>String(person.pin||"")));
+ const range=9000, limit=Math.floor(0x100000000/range)*range;
+ const buffer=new Uint32Array(1);
+ for(let attempt=0;attempt<10000;attempt++){
+  window.crypto.getRandomValues(buffer);
+  if(buffer[0]>=limit)continue;
+  const pin=String(1000+(buffer[0]%range));
+  if(!used.has(pin))return pin;
+ }
+ throw new Error("Could not create a unique PIN. Please try again.");
+}
+async function saveProfile(){
+ const type=document.getElementById("entryType").value,index=document.getElementById("entryIndex").value;
+ const name=document.getElementById("pName").value.trim();
+ if(type!=="student"&&type!=="teacher"){alert("Choose a valid account type.");return;}
+ if(!name){alert("Enter the full name.");return;}
+ try{
+  const list=type==="student"?students:teachers;
+  const old=index===""?{}:list[Number(index)];
+  if(index!==""&&!old){alert("This profile could not be found. Refresh and try again.");return;}
+  const photo=await resizePhoto(document.getElementById("pPhoto").files[0]);
+  const amountRaw=document.getElementById("pAmount").value.trim();
+  const paidRaw=document.getElementById("pPaid").value.trim();
+  const amount=amountRaw===""?0:Number(amountRaw);
+  const paid=paidRaw===""?0:Number(paidRaw);
+  if(!Number.isFinite(amount)||!Number.isFinite(paid)||amount<0||paid<0){alert("Enter valid non-negative payment amounts.");return;}
+  if(paid>amount){alert("Amount paid cannot be greater than the total amount.");return;}
+  const item={name,contact:document.getElementById("pContact").value.trim(),photo:photo||old.photo||"",amount,paid,paymentMethod:document.getElementById("pMethod").value.trim(),pin:old.pin||(type==="student"?makePin(students):"")};
+  if(type==="student")item.class=document.getElementById("pClass").value.trim();
+  else item.salary=Number(document.getElementById("pSalary").value)||0;
+  if(index==="")list.push(item);else list[Number(index)]=item;
+  persist();alert(index===""?(type==="student"?`Profile saved. Student PIN: ${item.pin}\nShare it privately with the student.`:"Teacher profile saved. The teacher must create their own 4-digit PIN from the home page."):"Profile updated successfully.");page("admin");
+ }catch(err){alert(err.message||"Could not save profile.");}
+}
+function photoHTML(person){
+ return person.photo?`<img class="avatar" src="${person.photo}" alt="Profile photo">`:`<div class="avatar">👤</div>`;
+}
+function profileCard(person,type,index){
+ return `<article class="profile">${photoHTML(person)}<h3>${esc(person.name)}</h3><p>${type==="student"?"Student • "+esc(person.class||"Class not set"):"Teacher"}</p><p>Contact: ${esc(person.contact||"Not provided")}</p>${type==="teacher"?`<p>Salary: Rs. ${esc(person.salary||0)}</p>`:""}</article>`;
+}
+let profileBackPage="studentsPage";
+function renderStudentNames(){
+ const q=(document.getElementById("studentProfileSearch").value||"").toLowerCase().trim();
+ const list=students.map((p,i)=>({p,i})).filter(x=>[x.p.name,x.p.class].some(v=>String(v||"").toLowerCase().includes(q)));
+ document.getElementById("studentNames").innerHTML=list.map(({p,i})=>`<div class="profile-summary" onclick="openProfile('student',${i})"><h3>${esc(p.name)}</h3><p>${esc(p.class||"Class not set")}</p></div>`).join("")||'<p class="empty">No student profiles found.</p>';
+}
+function renderTeacherNames(){
+ const q=(document.getElementById("teacherProfileSearch").value||"").toLowerCase().trim();
+ const list=teachers.map((p,i)=>({p,i})).filter(x=>[x.p.name,x.p.contact].some(v=>String(v||"").toLowerCase().includes(q)));
+ document.getElementById("teacherNames").innerHTML=list.map(({p,i})=>`<div class="profile-summary" onclick="openProfile('teacher',${i})"><h3>${esc(p.name)}</h3><p>Teacher</p></div>`).join("")||'<p class="empty">No teacher profiles found.</p>';
+}
+function openProfile(type,index){
+ const p=(type==="student"?students:teachers)[index];if(!p)return;
+ profileBackPage=type==="student"?"studentsPage":"teachersPage";
+ const photo=p.photo?`<img class="avatar" src="${p.photo}" alt="Profile photo">`:"";
+ document.getElementById("profileDetailContent").innerHTML=`<div style="text-align:center">${photo}<h2>${esc(p.name)}</h2><p>${type==="student"?"Student Profile":"Teacher Profile"}</p><p>${type==="student"?"Class: "+esc(p.class||"Not set"):"Teacher at MCC"}</p>${p.contact?`<p>Contact: ${esc(p.contact)}</p>`:""}${type==="teacher"&&p.salary?`<p>Salary: Rs. ${esc(p.salary)}</p>`:""}</div>`;
+ page("profileDetail");
+}
+function renderAdmin(){
+ const req=document.getElementById("requestsList");
+ req.innerHTML=admissions.map((a,i)=>`<div class="card"><b>${esc(a.name)}</b><p>${esc(a.class||"")} • ${esc(a.contact)}</p><button class="btn green" onclick="approve(${i})">Approve</button><button class="btn danger" onclick="reject(${i})">Reject</button></div>`).join("")||'<p class="empty">No pending applications.</p>';
+ let rows=[...students.map((p,i)=>({p,type:"student",i})),...teachers.map((p,i)=>({p,type:"teacher",i}))];
+ document.getElementById("manageList").innerHTML=rows.map(({p,type,i})=>`<div class="card" style="margin:10px 0">${photoHTML(p)}<b>${esc(p.name)}</b><p>${type==="student"?"Student • "+esc(p.class||""):"Teacher"}</p><button class="btn orange" onclick="openForm('${type}',${i})">Edit Profile</button></div>`).join("")||'<p class="empty">No records yet.</p>';
+ updateCounts();
+}
+function approve(i){
+ const a=admissions[i];if(!a)return;
+ try{
+  const person={name:a.name,contact:a.contact,class:a.class,photo:"",amount:0,paid:0,paymentMethod:"",pin:makePin(students)};
+  students.push(person);admissions.splice(i,1);persist();renderAdmin();
+  alert(`Admission approved. Student payment PIN: ${person.pin}\nShare this PIN privately with the student.`);
+ }catch(error){alert(error.message||"Could not approve admission or create PIN.");}
+}
+function reject(i){if(!confirm("Reject this application?"))return;admissions.splice(i,1);persist();renderAdmin();}
+function validURL(s){try{const u=new URL(s);return ["https:","http:"].includes(u.protocol)}catch(e){return false}}
+function saveLive(){
+ const title=document.getElementById("liveTitle").value.trim(),url=document.getElementById("liveUrl").value.trim();
+ if(!title||!validURL(url)){alert("Enter a class title and valid https:// meeting link.");return;}
+ live={title,url};persist();renderLive();alert("Live class saved.");
+}
+function renderLive(){
+ document.getElementById("liveTitle").value=live.title||"";document.getElementById("liveUrl").value=live.url||"";
+ document.getElementById("livePreview").innerHTML=live.url?`<div class="card"><h3>🔴 ${esc(live.title)}</h3><a href="${esc(live.url)}" target="_blank" rel="noopener">Open meeting link ↗</a></div>`:'<p class="empty">No live class has been created.</p>';
+}
+function addVideo(){
+ const title=document.getElementById("videoTitle").value.trim(),url=document.getElementById("videoUrl").value.trim();
+ if(!title||!validURL(url)){alert("Enter a title and valid video URL.");return;}
+ videos.unshift({title,url});persist();document.getElementById("videoTitle").value="";document.getElementById("videoUrl").value="";renderVideoManager();
+}
+function renderVideoManager(){
+ document.getElementById("videoManageList").innerHTML=videos.map((v,i)=>`<div class="card" style="margin:10px 0"><b>${esc(v.title)}</b><p><a href="${esc(v.url)}" target="_blank" rel="noopener">Open video ↗</a></p><button class="btn danger" onclick="deleteVideo(${i})">Delete</button></div>`).join("")||'<p class="empty">No recorded videos yet.</p>';
+}
+function deleteVideo(i){if(!confirm("Delete this video link?"))return;videos.splice(i,1);persist();renderVideoManager();}
+function renderClasses(){
+ document.getElementById("liveStudent").innerHTML=live.url?`<div class="card"><h3>🔴 Live Class: ${esc(live.title)}</h3><a class="btn primary" href="${esc(live.url)}" target="_blank" rel="noopener">Join Live Class</a></div>`:'<p class="empty">No live class available.</p>';
+ document.getElementById("videoStudentList").innerHTML=videos.map(v=>`<div class="card" style="margin:10px 0"><b>${esc(v.title)}</b><p><a href="${esc(v.url)}" target="_blank" rel="noopener">Watch lesson ↗</a></p></div>`).join("")||'<p class="empty">No recorded videos available.</p>';
+}
+let galleryPictures=read("mcc_home_gallery"),galleryTimer=null,galleryIndex=0;
+function renderHomeGallery(){
+ const wrap=document.getElementById("homeCarousel"),img=document.getElementById("carouselImage"),caption=document.getElementById("carouselCaption"),dots=document.getElementById("carouselDots");
+ if(galleryTimer){clearInterval(galleryTimer);galleryTimer=null;}
+ if(!galleryPictures.length){wrap.classList.add("hidden");dots.innerHTML="";return;}
+ wrap.classList.remove("hidden");
+ function show(){if(!galleryPictures.length)return;galleryIndex=galleryIndex%galleryPictures.length;const item=galleryPictures[galleryIndex];img.src=item.photo;caption.textContent=item.caption||"MCC Gallery";dots.innerHTML=galleryPictures.map((_,i)=>`<span class="${i===galleryIndex?"active":""}"></span>`).join("");galleryIndex=(galleryIndex+1)%galleryPictures.length;}
+ galleryIndex=0;show();if(galleryPictures.length>1)galleryTimer=setInterval(show,3500);
+}
+async function addGalleryPicture(){
+ const file=document.getElementById("galleryFile").files[0],caption=document.getElementById("galleryCaptionInput").value.trim();
+ if(!file){alert("Choose a picture first.");return;}
+ try{const photo=await resizePhoto(file);galleryPictures.push({photo,caption});localStorage.setItem("mcc_home_gallery",JSON.stringify(galleryPictures));document.getElementById("galleryFile").value="";document.getElementById("galleryCaptionInput").value="";renderGalleryManager();alert("Picture added.");}
+ catch(e){alert(e.message||"Could not add picture.");}
+}
+function renderGalleryManager(){
+ document.getElementById("galleryManageList").innerHTML=galleryPictures.map((g,i)=>`<div class="card" style="margin:10px 0;display:flex;gap:12px;align-items:center"><img src="${g.photo}" style="width:76px;height:64px;object-fit:cover;border-radius:9px"><div style="flex:1"><b>${esc(g.caption||"MCC Gallery Picture")}</b></div><button class="btn danger" onclick="deleteGalleryPicture(${i})">Delete</button></div>`).join("")||'<p class="empty">No pictures added yet.</p>';
+}
+function deleteGalleryPicture(i){if(!confirm("Remove this picture?"))return;galleryPictures.splice(i,1);localStorage.setItem("mcc_home_gallery",JSON.stringify(galleryPictures));renderGalleryManager();renderHomeGallery();}
+function openPaymentAccess(type){
+ document.getElementById("paymentAccess").dataset.type=type;
+ document.getElementById("paymentAccessTitle").textContent=(type==="student"?"🎓 Student":"👩‍🏫 Teacher")+" Payment Account";
+ document.getElementById("accessName").value="";document.getElementById("accessPin").value="";
+ document.getElementById("paymentAccessResult").innerHTML="";page("paymentAccess");
+}
+function verifyPaymentAccess(){
+ const type=document.getElementById("paymentAccess").dataset.type;
+ if(type!=="student"&&type!=="teacher"){alert("Please choose Student or Teacher access again.");return;}
+ const name=document.getElementById("accessName").value.trim().toLowerCase();
+ const pin=document.getElementById("accessPin").value.trim();
+ const list=type==="student"?students:teachers;
+ if(!name||!/^[0-9]{4}$/.test(pin)){alert("Enter your registered name and a valid 4-digit PIN.");return;}
+ const person=list.find(p=>String(p.name||"").trim().toLowerCase()===name&&String(p.pin||"")===pin);
+ if(!person){document.getElementById("paymentAccessResult").innerHTML="";document.getElementById("accessPin").value="";alert("Name or PIN is incorrect. Please try again or contact the MCC administrator.");return;}
+ const total=Number(person.amount??(type==="teacher"?person.salary:0))||0;
+ const paid=Number(person.paid)||0;const balance=Math.max(0,total-paid);
+ document.getElementById("paymentAccessResult").innerHTML=`<div class="card" style="margin-top:18px"><h3>Payment Details</h3><p><b>Name:</b> ${esc(person.name)}</p><p><b>Account:</b> ${type==="student"?"Student":"Teacher"}</p><p><b>Contact number:</b> ${esc(person.contact||"Not provided")}</p><p><b>Total amount:</b> Rs. ${total.toLocaleString("en-IN")}</p><p><b>Amount paid:</b> Rs. ${paid.toLocaleString("en-IN")}</p><p><b>Remaining balance:</b> Rs. ${balance.toLocaleString("en-IN")}</p><p><b>Payment method:</b> ${esc(person.paymentMethod||"Not set")}</p></div>`;
+}
+function renderPaymentAdmin(){
+ const all=[...students.map((p,i)=>({p,type:"student",i})),...teachers.map((p,i)=>({p,type:"teacher",i}))];
+ document.getElementById("paymentAdminList").innerHTML=all.map(({p,type,i})=>`<div class="card" style="margin:10px 0"><b>${type==="student"?"🎓 Student":"👩‍🏫 Teacher"}: ${esc(p.name)}</b><p>4-digit PIN: <strong>${esc(p.pin||"Not generated")}</strong></p><p>Contact: ${esc(p.contact||"Not provided")}</p><p>Total: Rs. ${Number(p.amount??(type==="teacher"?p.salary:0))||0} • Paid: Rs. ${Number(p.paid)||0} • Balance: Rs. ${Math.max(0,(Number(p.amount??(type==="teacher"?p.salary:0))||0)-(Number(p.paid)||0))}</p><p>Method: ${esc(p.paymentMethod||"Not set")}</p><button class="btn orange" onclick="regeneratePin('${type}',${i})">Regenerate PIN</button><button class="btn primary" onclick="openForm('${type}',${i})">Edit Payment Details</button></div>`).join("")||'<p class="empty">No student or teacher records yet. Add profiles first.</p>';
+}
+function regeneratePin(type,index){
+ const list=type==="student"?students:teachers;const person=list[index];if(!person)return;
+ if(!confirm(`Generate a new PIN for ${person.name}? The old PIN will stop working.`))return;
+ try{person.pin=makePin(list);persist();renderPaymentAdmin();alert(`New PIN for ${person.name}: ${person.pin}\nShare it privately.`);}
+ catch(error){alert(error.message||"Could not generate PIN.");}
+}
+// Give legacy records a PIN once, and persist it. Existing PINs are preserved.
+let pinsChanged=false;
+for(const list of [students]){
+ const seen=new Set();
+ for(const person of list){
+  const pin=String(person.pin||"");
+  if(!/^[0-9]{4}$/.test(pin)||seen.has(pin)){person.pin=makePin(list.filter(other=>other!==person));pinsChanged=true;}
+  seen.add(person.pin);
+ }
+}
+if(pinsChanged)persist();
+document.getElementById("year").textContent=new Date().getFullYear();updateCounts();renderHomePost();
+
+// MCC Advanced Learning Centre modules (browser-local demo storage)
+const loadStore=(key)=>{try{return JSON.parse(localStorage.getItem(key))||[];}catch(e){return [];}};
+let mccCourses=loadStore('mcc_courses'),mccSchedule=loadStore('mcc_schedule'),mccContacts=loadStore('mcc_contacts');
+const saveStore=(key,value)=>localStorage.setItem(key,JSON.stringify(value));
+function renderPublicCourses(){const box=document.getElementById('publicCourses');if(!mccCourses.length){box.innerHTML='<p class="empty">Course details will be published here soon. Please contact MCC for current programmes.</p>';return;}box.innerHTML=mccCourses.map(c=>`<article class="course-card"><span class="course-tag">${esc(c.level||'MCC COURSE')}</span><h3>${esc(c.name)}</h3><p>${esc(c.description||'Contact MCC for course details.')}</p><p><b>Duration:</b> ${esc(c.duration||'Contact us')}</p><p><b>Fee:</b> ${c.fee?`Rs. ${Number(c.fee).toLocaleString('en-IN')}`:'Contact MCC'}</p><button class="btn primary" onclick="page('admission')">Apply for this course</button></article>`).join('');}
+function renderCourseAdmin(){const box=document.getElementById('adminCourses');box.innerHTML=mccCourses.map(c=>`<div class="profile-summary"><h3>${esc(c.name)}</h3><p>${esc(c.level||'')} • ${esc(c.duration||'')} • Rs. ${Number(c.fee)||0}</p><p>${esc(c.description||'')}</p><button class="btn primary" onclick="editCourse('${c.id}')">Edit</button><button class="btn danger" onclick="deleteCourse('${c.id}')">Delete</button></div>`).join('')||'<p class="empty">No courses added yet.</p>';}
+function saveCourse(){if(!teacherLoggedIn)return alert('Admin login required.');const name=document.getElementById('courseName').value.trim();if(!name)return alert('Enter a course name.');const id=document.getElementById('courseEditId').value||('c'+Date.now());const item={id,name,level:document.getElementById('courseLevel').value.trim(),duration:document.getElementById('courseDuration').value.trim(),fee:document.getElementById('courseFee').value,description:document.getElementById('courseDescription').value.trim()};const i=mccCourses.findIndex(c=>c.id===id);if(i>=0)mccCourses[i]=item;else mccCourses.push(item);saveStore('mcc_courses',mccCourses);resetCourseForm();renderCourseAdmin();alert('Course saved.');}
+function editCourse(id){const c=mccCourses.find(x=>x.id===id);if(!c)return;document.getElementById('courseEditId').value=c.id;for(const [field,val] of [['courseName',c.name],['courseLevel',c.level],['courseDuration',c.duration],['courseFee',c.fee],['courseDescription',c.description]])document.getElementById(field).value=val||'';window.scrollTo({top:0,behavior:'smooth'});}
+function deleteCourse(id){if(!teacherLoggedIn||!confirm('Delete this course?'))return;mccCourses=mccCourses.filter(c=>c.id!==id);saveStore('mcc_courses',mccCourses);renderCourseAdmin();}
+function resetCourseForm(){['courseEditId','courseName','courseLevel','courseDuration','courseFee','courseDescription'].forEach(id=>document.getElementById(id).value='');}
+const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function timetableHtml(){if(!mccSchedule.length)return '<p class="empty">The weekly timetable has not been published yet.</p>';return days.map(day=>{const rows=mccSchedule.filter(s=>s.day===day);if(!rows.length)return '';return `<h3 class="schedule-day" style="padding:10px;border-radius:9px">${day}</h3><div class="tablewrap"><table><thead><tr><th>Time</th><th>Subject / Class</th><th>Teacher</th><th>Room / Mode</th></tr></thead><tbody>${rows.map(s=>`<tr><td>${esc(s.time)}</td><td>${esc(s.subject)}</td><td>${esc(s.teacher||'-')}</td><td>${esc(s.room||'-')}</td></tr>`).join('')}</tbody></table></div>`}).join('')||'<p class="empty">No class slots added.</p>';}
+function renderPublicTimetable(){document.getElementById('publicTimetable').innerHTML=timetableHtml();}
+function renderTimetableAdmin(){document.getElementById('adminTimetable').innerHTML=mccSchedule.map(s=>`<div class="profile-summary"><h3>${esc(s.day)} • ${esc(s.time)}</h3><p>${esc(s.subject)} • ${esc(s.teacher||'No teacher')} • ${esc(s.room||'')}</p><button class="btn primary" onclick="editSlot('${s.id}')">Edit</button><button class="btn danger" onclick="deleteSlot('${s.id}')">Delete</button></div>`).join('')||'<p class="empty">No timetable slots yet.</p>';}
+function saveSlot(){if(!teacherLoggedIn)return alert('Admin login required.');const subject=document.getElementById('slotSubject').value.trim(),time=document.getElementById('slotTime').value.trim();if(!subject||!time)return alert('Enter subject/class and time.');const id=document.getElementById('slotEditId').value||('s'+Date.now());const slot={id,day:document.getElementById('slotDay').value,time,subject,teacher:document.getElementById('slotTeacher').value.trim(),room:document.getElementById('slotRoom').value.trim()};const i=mccSchedule.findIndex(x=>x.id===id);if(i>=0)mccSchedule[i]=slot;else mccSchedule.push(slot);mccSchedule.sort((a,b)=>days.indexOf(a.day)-days.indexOf(b.day));saveStore('mcc_schedule',mccSchedule);resetSlotForm();renderTimetableAdmin();alert('Timetable updated.');}
+function editSlot(id){const s=mccSchedule.find(x=>x.id===id);if(!s)return;document.getElementById('slotEditId').value=id;for(const [f,v] of [['slotDay',s.day],['slotTime',s.time],['slotSubject',s.subject],['slotTeacher',s.teacher],['slotRoom',s.room]])document.getElementById(f).value=v||'';}
+function deleteSlot(id){if(!teacherLoggedIn||!confirm('Delete this timetable slot?'))return;mccSchedule=mccSchedule.filter(x=>x.id!==id);saveStore('mcc_schedule',mccSchedule);renderTimetableAdmin();}
+function resetSlotForm(){['slotEditId','slotTime','slotSubject','slotTeacher','slotRoom'].forEach(id=>document.getElementById(id).value='');document.getElementById('slotDay').value='Sunday';}
+function submitContact(){const name=document.getElementById('contactName').value.trim(),phone=document.getElementById('contactPhone').value.trim(),message=document.getElementById('contactMessage').value.trim();if(!name||!phone||!message)return alert('Please fill in your name, phone and message.');mccContacts.unshift({id:'m'+Date.now(),name,phone,message,date:new Date().toLocaleString()});saveStore('mcc_contacts',mccContacts);['contactName','contactPhone','contactMessage'].forEach(id=>document.getElementById(id).value='');alert('Your message has been saved. MCC will contact you.');page('home');}
+function renderContactInbox(){document.getElementById('contactMessages').innerHTML=mccContacts.map(m=>`<div class="profile-summary"><h3>${esc(m.name)}</h3><p>${esc(m.phone)} • ${esc(m.date)}</p><p>${esc(m.message)}</p><button class="btn danger" onclick="deleteContact('${m.id}')">Delete</button></div>`).join('')||'<p class="empty">No enquiries received yet.</p>';}
+function deleteContact(id){if(!teacherLoggedIn||!confirm('Delete this enquiry?'))return;mccContacts=mccContacts.filter(m=>m.id!==id);saveStore('mcc_contacts',mccContacts);renderContactInbox();}
+
+</script>
+</body>
+</html>
